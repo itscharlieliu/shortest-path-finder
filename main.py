@@ -1,9 +1,10 @@
 from board import Board
+from board import Board, Coordinates
 
 
 def main():
     board = Board()
-    board.set_at(1, 0)
+    board.set_at(Coordinates(1, 0))
     print(str(board))
 
 
