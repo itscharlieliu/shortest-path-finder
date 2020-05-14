@@ -29,3 +29,8 @@ def a_star(board: Board, start: Coord, end: Coord):
         # For testing
         for i in successors:
             print(i.__repr__(), end="\n")
+
+        for successor in successors:
+            if successor.coord == end:
+                # Done
+                return

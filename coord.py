@@ -5,3 +5,6 @@ class Coord:
 
     def __repr__(self):
         return "( {x}, {y} )".format(x=self.x, y=self.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
