@@ -17,14 +17,14 @@ def a_star(board: Board, start: Coord, end: Coord):
     closed_list: List[SearchNode] = []
 
     # Initialize open list
-    open_list.append(board.get_at(Coord(0, 0)))
+    open_list.append(board.get_at(start))
 
     while len(open_list) > 0:
         # find the min in the list and remove it
         min_open = open_list.index(min(open_list))
         curr = open_list.pop(min_open)
 
-        successors: List[SearchNode] = board.generate_successors(curr.coord)
+        successors: List[SearchNode] = board.generate_successors(curr)
 
         # For testing
         for i in successors:
