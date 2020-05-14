@@ -1,12 +1,13 @@
 from a_star import a_star
-from board import Board, Coordinates
+from board import Board
+from coord import Coord
 
 
 def main():
     board = Board()
-    board.set_at(Coordinates(1, 0))
+    board.get_at(Coord(1000, 3))
     print(str(board))
-    a_star(board, Coordinates(1, 1), Coordinates(5, 9))
+    a_star(board, Coord(1, 1), Coord(5, 9))
 
 
 if __name__ == "__main__":

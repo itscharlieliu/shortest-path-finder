@@ -1,12 +1,14 @@
-class Coordinates:
-    def __init__(self, x: int, y: int):
-        self.x: int = x
-        self.y: int = y
+from enum import Enum
+
+from coord import Coord
+from search_node import SearchNode
 
 
 class Board:
     def __init__(self, width: int = 10, height: int = 10):
-        self._board = [[0 for x in range(width)] for y in range(height)]
+        self._board = [
+            [SearchNode(Coord(x, y), 0, 0) for x in range(width)] for y in range(height)
+        ]
 
     def __str__(self):
         result = ""
@@ -17,8 +19,50 @@ class Board:
 
         return result
 
-    def set_at(self, point: Coordinates, val: bool = True):
-        self._board[point.y][point.x] = int(val)
+    def get_at(self, point: Coord) -> SearchNode or None:
+        try:
+            return self._board[point.y][point.x]
+        except IndexError:
+            return None
 
-    def get_at(self, point: Coordinates) -> bool:
-        return bool(self._board[point.y][point.x])
+    def generate_successors(self, point: Coord):
+        """
+        Generate up tp 8 possible successors depending on if it is a wall
+        :param point:
+        :return:
+        """
+        successors = []
+
+        curr = self.get_at(Coord(point.x - 1, point.y - 1))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x, point.y - 1))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x + 1, point.y - 1))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x - 1, point.y))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x + 1, point.y))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x - 1, point.y + 1))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x, point.y + 1))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        curr = self.get_at(Coord(point.x + 1, point.y + 1))
+        if curr and not curr.is_wall:
+            successors.append(curr)
+
+        return successors

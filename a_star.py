@@ -1,50 +1,31 @@
 from typing import List
 
-from board import Board, Coordinates
+from board import Board
+from coord import Coord
+from search_node import SearchNode
 
 
-class SearchNode:
+def a_star(board: Board, start: Coord, end: Coord):
     """
-    Representation of a node used in a_star
-    ...
-    Attributes
-    ----------
-    coordinates: Coordinates
-        The coordinates of the node on the board
-    f: int
-        Total cost of movement - the sum of g and h
-    g: int
-        Movement cost from the starting point
-    h: int
-        Estimated movement cost to the end point
+    https://www.geeksforgeeks.org/a-search-algorithm/
+    :param board: The game board that we use to navigate
+    :param start: The coordinate to start at
+    :param end: The coordinate where we want to reach
     """
-
-    def __init__(self, coordinates: Coordinates, g: int, h: int):
-        self.coordinates: coordinates
-        self.f = g + h
-        self.g = g
-        self.h = h
-
-    def __eq__(self, other):
-        if not isinstance(other, SearchNode):
-            # don't attempt to compare against unrelated types
-            return NotImplemented
-        return self.f == other.f and self.g == other.g and self.h == other.h
-
-    def __lt__(self, other):
-        if not isinstance(other, SearchNode):
-            # don't attempt to compare against unrelated types
-            return NotImplemented
-        return self.f < other.f or self.h < other.h
-
-    def __gt__(self, other):
-        if not isinstance(other, SearchNode):
-            # don't attempt to compare against unrelated types
-            return NotImplemented
-        return self.f > other.f or self.h > other.h
-
-
-def a_star(board: Board, start: Coordinates, end: Coordinates):
     # TODO change this to tree for optimization
     open_list: List[SearchNode] = []
-    closed_list: List[SearchNode] = [SearchNode(start, 0, 0)]
+    closed_list: List[SearchNode] = []
+
+    # Initialize open list
+    open_list.append(board.get_at(Coord(0, 0)))
+
+    while len(open_list) > 0:
+        # find the min in the list and remove it
+        min_open = open_list.index(min(open_list))
+        curr = open_list.pop(min_open)
+
+        successors: List[SearchNode] = board.generate_successors(curr.coord)
+
+        # For testing
+        for i in successors:
+            print(i.__repr__(), end="\n")
