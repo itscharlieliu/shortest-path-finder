@@ -44,6 +44,7 @@ class SearchNode:
     def __eq__(self, other):
         if not isinstance(other, SearchNode):
             return NotImplemented
+        print("{}, {}".format(self.f, other.f))
         return self.f == other.f and self.g == other.g and self.h == other.h
 
     def __lt__(self, other):
