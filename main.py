@@ -9,6 +9,8 @@ def main():
     print(str(board))
     a_star(board, Coord(1, 1), Coord(5, 9))
 
+    print(board.get_at(Coord(0, 0)).calculate_distance(board.get_at(Coord(3, 4))))
+
 
 if __name__ == "__main__":
     main()

@@ -24,7 +24,9 @@ def a_star(board: Board, start: Coord, end: Coord):
         min_open = open_list.index(min(open_list))
         curr = open_list.pop(min_open)
 
-        successors: List[SearchNode] = board.generate_successors(curr)
+        successors: List[SearchNode] = board.generate_successors(
+            curr, board.get_at(end)
+        )
 
         # For testing
         for i in successors:
@@ -33,4 +35,5 @@ def a_star(board: Board, start: Coord, end: Coord):
         for successor in successors:
             if successor.coord == end:
                 # Done
+                # TODO Process done condition
                 return

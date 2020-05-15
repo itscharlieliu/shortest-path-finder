@@ -1,3 +1,5 @@
+from math import sqrt
+
 from coord import Coord
 
 
@@ -37,18 +39,26 @@ class SearchNode:
 
     def __eq__(self, other):
         if not isinstance(other, SearchNode):
-            # don't attempt to compare against unrelated types
             return NotImplemented
         return self.f == other.f and self.g == other.g and self.h == other.h
 
     def __lt__(self, other):
         if not isinstance(other, SearchNode):
-            # don't attempt to compare against unrelated types
             return NotImplemented
         return self.f < other.f or self.h < other.h
 
     def __gt__(self, other):
         if not isinstance(other, SearchNode):
-            # don't attempt to compare against unrelated types
             return NotImplemented
         return self.f > other.f or self.h > other.h
+
+    def calculate_distance(self, other):
+        if not isinstance(other, SearchNode):
+            return NotImplemented
+
+        own_coords = self.coord
+        other_coords = other.coord
+        return sqrt(
+            (((own_coords.x * 10) - (other_coords.x * 10)) ** 2)
+            + (((own_coords.y * 10) - (other_coords.y * 10)) ** 2)
+        )

@@ -3,6 +3,9 @@ from enum import Enum
 from coord import Coord
 from search_node import SearchNode
 
+DIAGONAL = 14
+NON_DIAGONAL = 10
+
 
 class Board:
     def __init__(self, width: int = 10, height: int = 10):
@@ -27,10 +30,11 @@ class Board:
         except IndexError:
             return None
 
-    def generate_successors(self, node: SearchNode):
+    def generate_successors(self, node: SearchNode, end_node: SearchNode):
         """
         Generate up tp 8 possible successors depending on if it is a wall
-        :param point:
+        :param end_node: Where the end point is
+        :param node: Current Search Node we are processing (attaching successors to)
         :return:
         """
         successors = []
@@ -38,6 +42,9 @@ class Board:
         curr = self.get_at(Coord(node.coord.x - 1, node.coord.y - 1))
         if curr and not curr.is_wall:
             curr.parent = node
+            # curr.g = node.g + DIAGONAL
+            # curr.h = node.calculate_distance(end_node)
+            # curr.f = g + h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x, node.coord.y - 1))

@@ -7,4 +7,6 @@ class Coord:
         return "( {x}, {y} )".format(x=self.x, y=self.y)
 
     def __eq__(self, other):
+        if not isinstance(other, Coord):
+            return NotImplemented
         return self.x == other.x and self.y == other.y
