@@ -26,3 +26,15 @@ class Board:
             return self._board[point.y][point.x]
         except IndexError:
             return None
+
+    def set_at(self, other: SearchNode):
+        point = other.coord
+        try:
+            if point.x < 0 or point.y < 0:
+                raise IndexError
+            node = self._board[point.y][point.x]
+            node.f = other.f
+            node.h = other.h
+            node.g = other.g
+        except IndexError:
+            pass

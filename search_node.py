@@ -21,7 +21,7 @@ class SearchNode:
         The node that this one originated from
     """
 
-    def __init__(self, coord: Coord, g: int, h: int, parent=None):
+    def __init__(self, coord: Coord, g: int = 0, h: int = 0, parent=None):
         self.coord = coord
         self.f = g + h
         self.g = g
@@ -44,7 +44,6 @@ class SearchNode:
     def __eq__(self, other):
         if not isinstance(other, SearchNode):
             return NotImplemented
-        print("{}, {}".format(self.f, other.f))
         return self.f == other.f and self.g == other.g and self.h == other.h
 
     def __lt__(self, other):
