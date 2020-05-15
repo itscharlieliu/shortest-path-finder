@@ -10,7 +10,7 @@ NON_DIAGONAL = 10
 
 def a_star(board: Board, start: Coord, end: Coord):
     """
-    https://www.geeksforgeeks.org/a-search-algorithm/
+    Function to find the shortest path on the board using the A* method
     :param board: The game board that we use to navigate
     :param start: The coordinate to start at
     :param end: The coordinate where we want to reach

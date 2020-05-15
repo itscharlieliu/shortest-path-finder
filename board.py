@@ -35,3 +35,6 @@ class Board:
             self._board[point.y][point.x] = other
         except IndexError:
             pass
+
+    def set_wall(self, point: Coord, is_set=True):
+        self._board[point.y][point.x].is_wall = is_set
