@@ -3,7 +3,7 @@ from enum import Enum
 from coord import Coord
 from search_node import SearchNode
 
-DIAGONAL = 14
+DIAGONAL = 14.142135623730951
 NON_DIAGONAL = 10
 
 
@@ -42,44 +42,65 @@ class Board:
         curr = self.get_at(Coord(node.coord.x - 1, node.coord.y - 1))
         if curr and not curr.is_wall:
             curr.parent = node
-            # curr.g = node.g + DIAGONAL
-            # curr.h = node.calculate_distance(end_node)
-            # curr.f = g + h
+            curr.g = node.g + DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x, node.coord.y - 1))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + NON_DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x + 1, node.coord.y - 1))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x - 1, node.coord.y))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + NON_DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x + 1, node.coord.y))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + NON_DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x - 1, node.coord.y + 1))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x, node.coord.y + 1))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + NON_DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         curr = self.get_at(Coord(node.coord.x + 1, node.coord.y + 1))
         if curr and not curr.is_wall:
             curr.parent = node
+            curr.g = node.g + DIAGONAL
+            curr.h = curr.calculate_distance(end_node)
+            curr.f = curr.g + curr.h
             successors.append(curr)
 
         return successors

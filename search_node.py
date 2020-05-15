@@ -34,7 +34,11 @@ class SearchNode:
 
     def __repr__(self):
         return "Coordinates: {coord} | f: {f} | g: {g} | h: {h} | Is wall: {is_wall}".format(
-            coord=self.coord, f=self.f, g=self.g, h=self.h, is_wall=self.is_wall
+            coord=self.coord,
+            f=round(self.f),
+            g=round(self.g),
+            h=round(self.h),
+            is_wall=self.is_wall,
         )
 
     def __eq__(self, other):
