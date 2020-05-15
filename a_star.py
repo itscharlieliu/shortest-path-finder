@@ -15,18 +15,19 @@ def a_star(board: Board, start: Coord, end: Coord):
     :param start: The coordinate to start at
     :param end: The coordinate where we want to reach
     """
+
+    start_node = board.get_at(start)
     end_node = board.get_at(end)
+
+    start_node.is_important = True
+    end_node.is_important = True
 
     # TODO change this to tree for optimization
     open_list: List[SearchNode] = []
     closed_list: List[SearchNode] = []
 
     # Initialize open list
-    open_list.append(board.get_at(start))
-
-    # test
-    open_list.append(board.get_at(Coord(0, 0)))
-    board.get_at(Coord(0, 0)).f = 1000
+    open_list.append(start_node)
 
     while len(open_list) > 0:
 
@@ -47,13 +48,12 @@ def a_star(board: Board, start: Coord, end: Coord):
         ]
 
         if curr == end_node:
-            curr.print_path()
+            curr.set_path()
             break
 
         for coord in successor_coords:
             if board.get_at(coord) and not board.get_at(coord).is_wall:
-                curr_successor = SearchNode(coord)
-                curr_successor.is_wall = board.get_at(coord).is_wall
+                curr_successor = board.get_at(coord).copy()
 
                 curr_successor.parent = curr
                 # Set it to diagonal length if it is on a diagonal, otherwise set it to non-diagonal length
@@ -67,19 +67,26 @@ def a_star(board: Board, start: Coord, end: Coord):
 
                 try:
                     # first, look in open_list
-                    index = open_list.index(board.get_at(coord))
-                    if open_list[index] < curr_successor:
+                    open_index = open_list.index(board.get_at(coord))
+                    if open_list[open_index] < curr_successor:
                         # The one we found has a higher f than curr, so we skip it
                         continue
 
-                    # then, look in closed list
-                    index = closed_list.index(board.get_at(coord))
-                    if closed_list[index] < curr_successor:
-                        # The one we found has a higher f than curr, so we skip it
-                        continue
-                    # Otherwise, we add it
+                    # Otherwise, we edit it on the open list
+                    open_list[open_index] = curr_successor
+                    board.set_at(curr_successor)
+
+                    continue
                 except ValueError:
                     # it's not in the list, so we add it
+                    pass
+                try:
+                    # then, look in closed list
+                    closed_index = closed_list.index(board.get_at(coord))
+                    if closed_list[closed_index] < curr_successor:
+                        # The one we found has a higher f than curr, so we skip it
+                        continue
+                except ValueError:
                     pass
 
                 board.set_at(curr_successor)

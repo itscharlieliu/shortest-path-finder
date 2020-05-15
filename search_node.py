@@ -28,17 +28,30 @@ class SearchNode:
         self.h = h
         self.parent: SearchNode or None = parent
         self.is_wall = False
+        self.is_path = False
+        self.is_important = False
 
     def __str__(self):
-        return str(int(self.is_wall))
+        if self.is_important:
+            return "A"
+        if self.is_wall:
+            return "X"
+        if self.is_path:
+            return "O"
+        return "_"
 
     def __repr__(self):
-        return "Coordinates: {coord} | f: {f} | g: {g} | h: {h} | Is wall: {is_wall}".format(
-            coord=self.coord,
-            f=round(self.f),
-            g=round(self.g),
-            h=round(self.h),
-            is_wall=self.is_wall,
+        return (
+            "Coordinates: {coord} | f: {f} | g: {g} | h: {h} | "
+            "Is wall: {is_wall} | Is path: {is_path} | Is important: {is_important}".format(
+                coord=self.coord,
+                f=round(self.f),
+                g=round(self.g),
+                h=round(self.h),
+                is_wall=self.is_wall,
+                is_path=self.is_path,
+                is_important=self.is_important,
+            )
         )
 
     def __eq__(self, other):
@@ -71,10 +84,19 @@ class SearchNode:
             + (((own_coords.y * 10) - (other_coords.y * 10)) ** 2)
         )
 
-    def print_path(self):
+    def set_path(self):
         if self.parent is None:
             return
 
-        self.parent.print_path()
+        self.parent.set_path()
 
-        print(self.__repr__(), end="\n")
+        self.is_path = True
+
+    def copy(self):
+        new_node = SearchNode(self.coord, self.g, self.h, self.parent)
+        new_node.f = self.f
+        new_node.is_wall = self.is_wall
+        new_node.is_path = self.is_path
+        new_node.is_important = self.is_important
+
+        return new_node

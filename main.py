@@ -5,9 +5,9 @@ from coord import Coord
 
 def main():
     board = Board()
-    board.get_at(Coord(1000, 3))
     print(str(board))
     a_star(board, Coord(1, 1), Coord(5, 9))
+    print(str(board))
 
 
 if __name__ == "__main__":

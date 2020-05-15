@@ -32,9 +32,6 @@ class Board:
         try:
             if point.x < 0 or point.y < 0:
                 raise IndexError
-            node = self._board[point.y][point.x]
-            node.f = other.f
-            node.h = other.h
-            node.g = other.g
+            self._board[point.y][point.x] = other
         except IndexError:
             pass
