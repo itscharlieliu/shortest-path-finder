@@ -34,8 +34,6 @@ def a_star(board: Board, start: Coord, end: Coord):
         min_open = open_list.index(min(open_list))
         curr = open_list.pop(min_open)
 
-        successors: List[SearchNode] = []
-
         # generate all the positions for the successors
         successor_coords = [
             Coord(curr.coord.x - 1, curr.coord.y - 1),
@@ -47,6 +45,10 @@ def a_star(board: Board, start: Coord, end: Coord):
             Coord(curr.coord.x, curr.coord.y + 1),
             Coord(curr.coord.x + 1, curr.coord.y + 1),
         ]
+
+        if curr == end_node:
+            curr.print_path()
+            break
 
         for coord in successor_coords:
             if board.get_at(coord) and not board.get_at(coord).is_wall:
@@ -64,8 +66,15 @@ def a_star(board: Board, start: Coord, end: Coord):
                 curr_successor.f = curr_successor.g + curr_successor.h
 
                 try:
+                    # first, look in open_list
                     index = open_list.index(board.get_at(coord))
                     if open_list[index] < curr_successor:
+                        # The one we found has a higher f than curr, so we skip it
+                        continue
+
+                    # then, look in closed list
+                    index = closed_list.index(board.get_at(coord))
+                    if closed_list[index] < curr_successor:
                         # The one we found has a higher f than curr, so we skip it
                         continue
                     # Otherwise, we add it
@@ -74,4 +83,6 @@ def a_star(board: Board, start: Coord, end: Coord):
                     pass
 
                 board.set_at(curr_successor)
-                successors.append(curr_successor)
+                open_list.append(curr_successor)
+
+        closed_list.append(curr)

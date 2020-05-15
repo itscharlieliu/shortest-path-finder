@@ -70,3 +70,11 @@ class SearchNode:
             (((own_coords.x * 10) - (other_coords.x * 10)) ** 2)
             + (((own_coords.y * 10) - (other_coords.y * 10)) ** 2)
         )
+
+    def print_path(self):
+        if self.parent is None:
+            return
+
+        self.parent.print_path()
+
+        print(self.__repr__(), end="\n")
