@@ -44,17 +44,21 @@ class SearchNode:
     def __eq__(self, other):
         if not isinstance(other, SearchNode):
             return NotImplemented
-        return self.f == other.f and self.g == other.g and self.h == other.h
+        return self.coord == other.coord
 
     def __lt__(self, other):
         if not isinstance(other, SearchNode):
             return NotImplemented
-        return self.f < other.f or self.h < other.h
+        if self.f < other.f:
+            return True
+        return False
 
     def __gt__(self, other):
         if not isinstance(other, SearchNode):
             return NotImplemented
-        return self.f > other.f or self.h > other.h
+        if self.f > other.f:
+            return True
+        return False
 
     def calculate_distance(self, other):
         if not isinstance(other, SearchNode):

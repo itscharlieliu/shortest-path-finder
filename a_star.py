@@ -26,12 +26,9 @@ def a_star(board: Board, start: Coord, end: Coord):
 
     # test
     open_list.append(board.get_at(Coord(0, 0)))
+    board.get_at(Coord(0, 0)).f = 1000
 
     while len(open_list) > 0:
-        print("looped")
-
-        for node in open_list:
-            print(node.__repr__())
 
         # find the min in the list and remove it
         min_open = open_list.index(min(open_list))
@@ -52,8 +49,10 @@ def a_star(board: Board, start: Coord, end: Coord):
         ]
 
         for coord in successor_coords:
-            curr_successor = SearchNode(coord)
-            if curr_successor and not curr_successor.is_wall:
+            if board.get_at(coord) and not board.get_at(coord).is_wall:
+                curr_successor = SearchNode(coord)
+                curr_successor.is_wall = board.get_at(coord).is_wall
+
                 curr_successor.parent = curr
                 # Set it to diagonal length if it is on a diagonal, otherwise set it to non-diagonal length
                 curr_successor.g = curr.g + (
@@ -63,20 +62,16 @@ def a_star(board: Board, start: Coord, end: Coord):
                 )
                 curr_successor.h = curr_successor.calculate_distance(end_node)
                 curr_successor.f = curr_successor.g + curr_successor.h
+
                 try:
-                    index = open_list.index(curr_successor)
-                    print(
-                        "{}\n{}\n------".format(
-                            open_list[index].__repr__(), curr_successor.__repr__()
-                        )
-                    )
+                    index = open_list.index(board.get_at(coord))
                     if open_list[index] < curr_successor:
-                        # The one we found has a lower f than curr, so we skip it
+                        # The one we found has a higher f than curr, so we skip it
                         continue
                     # Otherwise, we add it
                 except ValueError:
                     # it's not in the list, so we add it
                     pass
+
                 board.set_at(curr_successor)
                 successors.append(curr_successor)
-                print(curr_successor.__repr__())
