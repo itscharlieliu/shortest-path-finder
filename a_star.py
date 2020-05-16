@@ -1,4 +1,5 @@
-from queue import Queue
+from queue import Queue, Empty
+from time import sleep
 from typing import List
 
 from board import Board
@@ -32,6 +33,11 @@ def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
     open_list.append(start_node)
 
     while len(open_list) > 0:
+        try:
+            stop_calculation.get_nowait()
+            return
+        except Empty:
+            pass
 
         # find the min in the list and remove it
         min_open = open_list.index(min(open_list))
@@ -98,3 +104,4 @@ def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
 
         # clear_board(board.get_height() + 1)
         print(board)
+        # sleep(1)

@@ -6,8 +6,6 @@ from pynput import keyboard
 from a_star import a_star
 from board import Board
 from coord import Coord
-from stoppable_thread import StoppableThread
-from terminal_utils import clear_board
 
 OPTIONS = "1) Add wall | " "2) Remove Wall | " "0) Exit"
 
@@ -32,12 +30,10 @@ def main():
             if key.char == "3":
                 try:
                     if a_star_thread[0].is_alive():
-                        print("is alive")
                         stop_calculation.put(1)
                         a_star_thread[0].join()
-                        return
                 except IndexError:
-                    # Thread finished
+                    # Thread hasn't started yet
                     pass
 
                 if len(a_star_thread) > 0:
@@ -48,7 +44,6 @@ def main():
                         args=(stop_calculation, board, Coord(1, 1), Coord(5, 9)),
                     )
                 )
-                print("not alive yet")
                 a_star_thread[0].start()
             if key.char == "0":
                 return False
