@@ -9,6 +9,7 @@ class Board:
         self._board = [
             [SearchNode(Coord(x, y), 0, 0) for x in range(width)] for y in range(height)
         ]
+        self._height = height
 
     def __str__(self):
         result = ""
@@ -18,6 +19,9 @@ class Board:
             result += "\n"
 
         return result
+
+    def get_height(self):
+        return self._height
 
     def get_at(self, point: Coord) -> SearchNode or None:
         try:

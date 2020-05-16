@@ -1,16 +1,19 @@
+from queue import Queue
 from typing import List
 
 from board import Board
 from coord import Coord
 from search_node import SearchNode
+from terminal_utils import clear_board
 
 DIAGONAL = 14.142135623730951
 NON_DIAGONAL = 10
 
 
-def a_star(board: Board, start: Coord, end: Coord):
+def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
     """
     Function to find the shortest path on the board using the A* method
+    :param stop_calculation: A queue where if we put anything, this thread will stop
     :param board: The game board that we use to navigate
     :param start: The coordinate to start at
     :param end: The coordinate where we want to reach
@@ -22,7 +25,6 @@ def a_star(board: Board, start: Coord, end: Coord):
     start_node.is_important = True
     end_node.is_important = True
 
-    # TODO change this to tree for optimization
     open_list: List[SearchNode] = []
     closed_list: List[SearchNode] = []
 
@@ -93,3 +95,6 @@ def a_star(board: Board, start: Coord, end: Coord):
                 open_list.append(curr_successor)
 
         closed_list.append(curr)
+
+        # clear_board(board.get_height() + 1)
+        print(board)
