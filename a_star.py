@@ -4,7 +4,7 @@ from typing import List
 
 from board import Board
 from coord import Coord
-from search_node import SearchNode
+from search_node import SearchNode, NodeType
 from terminal_utils import clear_board
 
 DIAGONAL = 14.142135623730951
@@ -23,8 +23,8 @@ def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
     start_node = board.get_at(start)
     end_node = board.get_at(end)
 
-    start_node.is_important = True
-    end_node.is_important = True
+    start_node.set_type(NodeType.important)
+    end_node.set_type(NodeType.important)
 
     open_list: List[SearchNode] = []
     closed_list: List[SearchNode] = []
@@ -60,7 +60,10 @@ def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
             break
 
         for coord in successor_coords:
-            if board.get_at(coord) and not board.get_at(coord).is_wall:
+            if (
+                board.get_at(coord)
+                and board.get_at(coord).get_type() is not NodeType.wall
+            ):
                 curr_successor = board.get_at(coord).copy()
 
                 curr_successor.parent = curr
@@ -98,10 +101,15 @@ def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
                     pass
 
                 board.set_at(curr_successor)
+                curr_successor.set_type(NodeType.open)
                 open_list.append(curr_successor)
 
+        curr.set_type(NodeType.closed)
         closed_list.append(curr)
 
-        # clear_board(board.get_height() + 1)
+        clear_board(board.get_height() + 2)
         print(board)
-        # sleep(1)
+        sleep(0.2)
+
+    clear_board(board.get_height() + 2)
+    print(board)

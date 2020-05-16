@@ -7,7 +7,7 @@ from a_star import a_star
 from board import Board
 from coord import Coord
 
-OPTIONS = "1) Add wall | " "2) Remove Wall | " "0) Exit"
+OPTIONS = "1) Add wall | 2) Remove Wall | 3) Run A* | 0) Exit"
 
 
 def main():
@@ -17,7 +17,6 @@ def main():
     height = 10
 
     board = Board(width, height)
-
     print(board)
 
     stop_calculation = Queue()
@@ -38,10 +37,13 @@ def main():
 
                 if len(a_star_thread) > 0:
                     a_star_thread.pop()
+
+                work_board = Board(width, height)
+
                 a_star_thread.append(
                     threading.Thread(
                         target=a_star,
-                        args=(stop_calculation, board, Coord(1, 1), Coord(5, 9)),
+                        args=(stop_calculation, work_board, Coord(1, 1), Coord(5, 9)),
                     )
                 )
                 a_star_thread[0].start()
@@ -53,21 +55,6 @@ def main():
 
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
-
-    # width = 10
-    # height = 10
-    #
-    # board = Board(width, height)
-    #
-    # print(str(board))
-    # a_star(board, Coord(1, 1), Coord(5, 9))
-    # clear_board(height)
-    # print(str(board))
-
-    # while True:
-    #     print(OPTIONS)
-    #     if input() == "0":
-    #         break
 
 
 if __name__ == "__main__":

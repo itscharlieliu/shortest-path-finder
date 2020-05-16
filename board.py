@@ -1,7 +1,5 @@
-from enum import Enum
-
 from coord import Coord
-from search_node import SearchNode
+from search_node import SearchNode, NodeType
 
 
 class Board:
@@ -13,6 +11,7 @@ class Board:
 
     def __str__(self):
         result = ""
+        result += "\n"
         for row in self._board:
             for val in row:
                 result += str(val)
@@ -41,4 +40,6 @@ class Board:
             pass
 
     def set_wall(self, point: Coord, is_set=True):
-        self._board[point.y][point.x].is_wall = is_set
+        self._board[point.y][point.x].set_type(
+            NodeType.wall if is_set else NodeType.none
+        )
