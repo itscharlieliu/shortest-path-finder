@@ -43,3 +43,8 @@ class Board:
         self._board[point.y][point.x].set_type(
             NodeType.wall if is_set else NodeType.none
         )
+
+    def clear(self):
+        for row in self._board:
+            for val in row:
+                val.set_type(NodeType.none)
