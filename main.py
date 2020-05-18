@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import threading
 from queue import Queue
 
@@ -30,18 +32,32 @@ def main():
     def handle_edit_wall(key):
         print(str(key))
 
-    # Don't run a* in the listener thread. Rather, start another thread to run it
+    def handle_run_algorithm():
+        """run A* in a separate thread"""
+        state.set(AppState.running_algorithm)
+
+        while len(a_star_thread) > 0:
+            a_star_thread.pop()
+
+        a_star_thread.append(
+            threading.Thread(
+                target=a_star, args=(stop_calculation, board, Coord(1, 1), Coord(5, 9)),
+            )
+        )
+        a_star_thread[0].start()
+
     def on_press(key):
 
-        board.clear()
-
-        try:
-            if a_star_thread[0].is_alive():
-                stop_calculation.put(1)
-                a_star_thread[0].join()
-        except IndexError:
-            # Thread hasn't started yet
-            pass
+        if state.get() == AppState.running_algorithm:
+            # Clear the board whenever the user presses a button
+            board.clear()
+            try:
+                if a_star_thread[0].is_alive():
+                    stop_calculation.put(1)
+                    a_star_thread[0].join()
+            except IndexError:
+                # Thread hasn't started yet
+                pass
 
         if state.get() == AppState.adding_wall:
             handle_edit_wall(key)
@@ -50,18 +66,7 @@ def main():
                 state.set(AppState.adding_wall)
                 return
             if key.char == "3":
-                state.set(AppState.running_algorithm)
-
-                if len(a_star_thread) > 0:
-                    a_star_thread.pop()
-
-                a_star_thread.append(
-                    threading.Thread(
-                        target=a_star,
-                        args=(stop_calculation, board, Coord(1, 1), Coord(5, 9)),
-                    )
-                )
-                a_star_thread[0].start()
+                handle_run_algorithm()
                 return
             if key.char == "0":
                 return False
