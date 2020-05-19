@@ -1,7 +1,7 @@
 from EscapeCodes import EscapeCodes
 from coord import Coord
 from search_node import SearchNode, NodeType
-from terminal_utils import clear_board
+from terminal_utils import clear_display
 
 
 class Board:
@@ -55,7 +55,8 @@ class Board:
         self._board[point.y][point.x].set_type(
             NodeType.wall
             if not self._board[point.y][point.x].get_type() == NodeType.wall
-            else NodeType.none
+            else NodeType.none,
+            force=True,
         )
 
     def set_cursor(self, point: Coord):
@@ -76,7 +77,7 @@ class Board:
 
 def print_board(board, clear=True, message=""):
     if clear:
-        clear_board(board.get_height() + 2)
+        clear_display()
 
-    print(message, end="\n\n")
+    print(message, end="\n")
     print(board)

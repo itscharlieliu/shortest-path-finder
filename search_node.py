@@ -83,9 +83,11 @@ class SearchNode:
             return True
         return False
 
-    def set_type(self, node_type: NodeType):
+    def set_type(self, node_type: NodeType, force=False):
         if self._type is NodeType.important:
             # Don't override important nodes
+            return
+        if not force and self._type == NodeType.wall:
             return
         self._type = node_type
 
