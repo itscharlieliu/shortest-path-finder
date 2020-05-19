@@ -2,10 +2,9 @@ from queue import Queue, Empty
 from time import sleep
 from typing import List
 
-from board import Board
+from board import Board, print_board
 from coord import Coord
 from search_node import SearchNode, NodeType
-from terminal_utils import clear_board
 
 DIAGONAL = 14.142135623730951
 NON_DIAGONAL = 10
@@ -107,9 +106,7 @@ def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
         curr.set_type(NodeType.closed)
         closed_list.append(curr)
 
-        clear_board(board.get_height() + 2)
-        print(board)
+        print_board(board)
         sleep(0.2)
 
-    clear_board(board.get_height() + 2)
-    print(board)
+    print_board(board)
