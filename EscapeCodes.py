@@ -1,7 +1,8 @@
-class _ColorCodes:
+class _EscapeCodes:
     def __init__(self):
         self.red = "\033[91m"
         self.none = "\033[0m"
+        self.green = "\033[92m"
 
 
-ColorCodes = _ColorCodes()
+EscapeCodes = _EscapeCodes()

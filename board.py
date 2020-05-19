@@ -1,4 +1,4 @@
-from ColorCodes import ColorCodes
+from EscapeCodes import EscapeCodes
 from coord import Coord
 from search_node import SearchNode, NodeType
 from terminal_utils import clear_board
@@ -14,12 +14,11 @@ class Board:
 
     def __str__(self):
         result = ""
-        result += "\n"
         for row in self._board:
             for val in row:
                 if val.coord == self._cursor:
                     result += "{color}{val}{end}".format(
-                        color=ColorCodes.red, val=str(val), end=ColorCodes.none
+                        color=EscapeCodes.red, val=str(val), end=EscapeCodes.none
                     )
                     continue
                 result += str(val)
@@ -52,11 +51,21 @@ class Board:
             NodeType.wall if is_set else NodeType.none
         )
 
+    def toggle_wall(self, point: Coord):
+        self._board[point.y][point.x].set_type(
+            NodeType.wall
+            if not self._board[point.y][point.x].get_type() == NodeType.wall
+            else NodeType.none
+        )
+
     def set_cursor(self, point: Coord):
         self._cursor = point
 
     def get_cursor(self):
         return self._cursor
+
+    def clear_cursor(self):
+        self._cursor = None
 
     def clear(self):
         self._cursor = None
@@ -65,7 +74,9 @@ class Board:
                 val.set_type(NodeType.none)
 
 
-def print_board(board, clear=True):
+def print_board(board, clear=True, message=""):
     if clear:
         clear_board(board.get_height() + 2)
+
+    print(message, end="\n\n")
     print(board)

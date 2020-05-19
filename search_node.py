@@ -1,6 +1,7 @@
 from enum import Enum
 from math import sqrt
 
+from EscapeCodes import EscapeCodes
 from coord import Coord
 
 
@@ -43,7 +44,7 @@ class SearchNode:
         switcher = {
             NodeType.none: "-",
             NodeType.wall: "█",
-            NodeType.path: "▓",
+            NodeType.path: "{}▓{}".format(EscapeCodes.green, EscapeCodes.none),
             NodeType.important: "@",
             NodeType.open: "░",
             NodeType.closed: "▒",

@@ -9,18 +9,23 @@ from a_star import a_star
 from board import Board, print_board
 from coord import Coord
 from state import State, AppState
+from terminal_utils import clear_board
 
-OPTIONS = "1) Add wall | 2) Remove Wall | 3) Run A* | 0) Exit"
+OPTIONS = "1) Edit wall | 2) Set start | 3) Run A* | 0) Exit"
+
+EDIT_WALL_OPTIONS = "Use space bar to Toggle wall | WASD to move cursor"
 
 
 def main():
+    # Initialize screen
+
     print(OPTIONS)
 
     width = 10
     height = 10
 
     board = Board(width, height)
-    print(board)
+    print_board(board, clear=False)
 
     stop_calculation = Queue()
 
@@ -29,21 +34,25 @@ def main():
     state = State()
 
     def handle_edit_wall(key):
-        if key == keyboard.Key.left:
-            board.set_cursor(board.get_cursor() + Coord(-1, 0))
-        if key == keyboard.Key.up:
-            board.set_cursor(board.get_cursor() + Coord(0, -1))
-        if key == keyboard.Key.right:
-            board.set_cursor(board.get_cursor() + Coord(1, 0))
-        if key == keyboard.Key.down:
-            board.set_cursor(board.get_cursor() + Coord(0, 1))
-
+        try:
+            if key.char == "a":
+                board.set_cursor(board.get_cursor() + Coord(-1, 0))
+            if key.char == "w":
+                board.set_cursor(board.get_cursor() + Coord(0, -1))
+            if key.char == "d":
+                board.set_cursor(board.get_cursor() + Coord(1, 0))
+            if key.char == "s":
+                board.set_cursor(board.get_cursor() + Coord(0, 1))
+        except AttributeError:
+            if key == keyboard.Key.space:
+                board.toggle_wall(board.get_cursor())
         print_board(board)
-        pass
 
     def handle_run_algorithm():
         """run A* in a separate thread"""
         state.set(AppState.running_algorithm)
+
+        board.clear_cursor()
 
         while len(a_star_thread) > 0:
             a_star_thread.pop()
@@ -56,6 +65,7 @@ def main():
         a_star_thread[0].start()
 
     def on_press(key):
+        clear_board(1)
 
         if state.get() == AppState.running_algorithm:
             # Clear the board whenever the user presses a button
@@ -73,7 +83,7 @@ def main():
         try:
             if key.char == "1":
                 board.set_cursor(Coord(0, 0))
-                print_board(board)
+                print_board(board, message=EDIT_WALL_OPTIONS)
                 state.set(AppState.adding_wall)
                 return
             if key.char == "3":
