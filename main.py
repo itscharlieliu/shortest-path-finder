@@ -11,17 +11,18 @@ from board import Board, print_board
 from coord import Coord
 from state import State, AppState
 
-OPTIONS = "1) Edit wall | 2) Set start | 3) Run A* | 0) Exit"
-
-EDIT_WALL_OPTIONS = "Use space bar to Toggle wall | WASD to move cursor"
+EDIT_WALL_OPTIONS = "Press A to Toggle wall | Arrow Keys to move cursor"
+SETTING_START = "Press A to set start | Arrow Keys to move cursor"
+SETTING_END = "Press A to set end | Arrow Keys to move cursor"
+RUNNING_A_STAR = "Running A*. Press any button to stop"
 
 
 def main():
-    width = 10
-    height = 10
+    width = 30
+    height = 20
 
     board = Board(width, height)
-    print_board(board, message=OPTIONS)
+    print_board(board)
 
     stop_calculation = Queue()
 
@@ -29,17 +30,7 @@ def main():
 
     state = State()
 
-    def handle_edit_wall(key):
-        # try:
-        #     if key.char == "a":
-        #         board.set_cursor(board.get_cursor() + Coord(-1, 0))
-        #     if key.char == "w":
-        #         board.set_cursor(board.get_cursor() + Coord(0, -1))
-        #     if key.char == "d":
-        #         board.set_cursor(board.get_cursor() + Coord(1, 0))
-        #     if key.char == "s":
-        #         board.set_cursor(board.get_cursor() + Coord(0, 1))
-        # except AttributeError:
+    def handle_move_cursor(key):
         if key == keyboard.Key.left:
             board.set_cursor(board.get_cursor() + Coord(-1, 0))
         if key == keyboard.Key.up:
@@ -48,8 +39,6 @@ def main():
             board.set_cursor(board.get_cursor() + Coord(1, 0))
         if key == keyboard.Key.down:
             board.set_cursor(board.get_cursor() + Coord(0, 1))
-        if key == keyboard.Key.space:
-            board.toggle_wall(board.get_cursor())
 
     def handle_run_algorithm():
         """run A* in a separate thread"""
@@ -61,9 +50,7 @@ def main():
             a_star_thread.pop()
 
         a_star_thread.append(
-            threading.Thread(
-                target=a_star, args=(stop_calculation, board, Coord(1, 1), Coord(5, 9)),
-            )
+            threading.Thread(target=a_star, args=(stop_calculation, board),)
         )
         a_star_thread[0].start()
 
@@ -80,13 +67,39 @@ def main():
                 pass
 
         if state.get() == AppState.adding_wall:
-            handle_edit_wall(key)
+            handle_move_cursor(key)
+            try:
+                if key.char == "a":
+                    board.toggle_wall(board.get_cursor())
+            except AttributeError:
+                pass
+        if state.get() == AppState.setting_start:
+            handle_move_cursor(key)
+            try:
+                if key.char == "a":
+                    board.set_start(board.get_cursor())
+            except AttributeError:
+                pass
+        if state.get() == AppState.setting_end:
+            handle_move_cursor(key)
+            try:
+                if key.char == "a":
+                    board.set_end(board.get_cursor())
+            except AttributeError:
+                pass
+
         try:
             if key.char == "1":
                 board.set_cursor(Coord(0, 0))
                 state.set(AppState.adding_wall)
                 return
+            if key.char == "2":
+                board.set_cursor(Coord(0, 0))
+                state.set(AppState.setting_start)
             if key.char == "3":
+                board.set_cursor(Coord(0, 0))
+                state.set(AppState.setting_end)
+            if key.char == "4":
                 handle_run_algorithm()
                 return
             if key.char == "0":
@@ -98,9 +111,16 @@ def main():
                 input()
                 return False
         finally:
-            message = OPTIONS + "\n"
-            if state.get() == AppState.adding_wall:
-                message += EDIT_WALL_OPTIONS
+            message = ""
+            curr_state = state.get()
+            if curr_state == AppState.adding_wall:
+                message = EDIT_WALL_OPTIONS
+            if curr_state == AppState.setting_start:
+                message = SETTING_START
+            if curr_state == AppState.setting_end:
+                message = SETTING_END
+            if curr_state == AppState.running_algorithm:
+                message = RUNNING_A_STAR
             print_board(board, message=message)
 
     with keyboard.Listener(on_press=on_press) as listener:

@@ -4,8 +4,9 @@ from enum import Enum
 class AppState(Enum):
     none = 0
     adding_wall = 1
-    removing_wall = 2
-    running_algorithm = 3
+    setting_start = 2
+    setting_end = 3
+    running_algorithm = 4
 
 
 class State:

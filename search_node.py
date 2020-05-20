@@ -9,9 +9,8 @@ class NodeType(Enum):
     none = 0
     wall = 1
     path = 2
-    important = 3
-    open = 4
-    closed = 5
+    open = 3
+    closed = 4
 
 
 class SearchNode:
@@ -42,12 +41,11 @@ class SearchNode:
 
     def __str__(self):
         switcher = {
-            NodeType.none: "-",
-            NodeType.wall: "█",
-            NodeType.path: "{}▓{}".format(EscapeCodes.green, EscapeCodes.none),
-            NodeType.important: "@",
-            NodeType.open: "░",
-            NodeType.closed: "▒",
+            NodeType.none: "--",
+            NodeType.wall: "██",
+            NodeType.path: "{}▓▓{}".format(EscapeCodes.green, EscapeCodes.none),
+            NodeType.open: "░░",
+            NodeType.closed: "▒▒",
         }
 
         return switcher.get(self._type, "_")
@@ -84,9 +82,6 @@ class SearchNode:
         return False
 
     def set_type(self, node_type: NodeType, force=False):
-        if self._type is NodeType.important:
-            # Don't override important nodes
-            return
         if not force and self._type == NodeType.wall:
             return
         self._type = node_type
@@ -108,6 +103,7 @@ class SearchNode:
     def set_path(self):
 
         self.set_type(NodeType.path)
+        print(self.__repr__())
         if self.parent is None:
             return
         self.parent.set_path()

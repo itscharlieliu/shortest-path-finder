@@ -3,6 +3,8 @@ from coord import Coord
 from search_node import SearchNode, NodeType
 from terminal_utils import clear_display
 
+OPTIONS = "1) Edit wall | 2) Set start | 3) Set end | 4) Run A* | 0) Exit"
+
 
 class Board:
     def __init__(self, width: int = 10, height: int = 10):
@@ -11,17 +13,22 @@ class Board:
         ]
         self._cursor: Coord or None = None
         self._height = height
+        self._start: Coord or None = None
+        self._end: Coord or None = None
 
     def __str__(self):
         result = ""
         for row in self._board:
             for val in row:
+                string = str(val)
+                if val.coord == self._start or val.coord == self._end:
+                    string = "@ "
                 if val.coord == self._cursor:
                     result += "{color}{val}{end}".format(
-                        color=EscapeCodes.red, val=str(val), end=EscapeCodes.none
+                        color=EscapeCodes.red, val=string, end=EscapeCodes.none
                     )
                     continue
-                result += str(val)
+                result += string
             result += "\n"
 
         return result
@@ -59,6 +66,20 @@ class Board:
             force=True,
         )
 
+    def get_start(self):
+        return self._start
+
+    def set_start(self, start: Coord):
+        self._start = start
+        self._board[start.y][start.x].set_type(NodeType.none)
+
+    def get_end(self):
+        return self._end
+
+    def set_end(self, end: Coord):
+        self._end = end
+        self._board[end.y][end.x].set_type(NodeType.none)
+
     def set_cursor(self, point: Coord):
         self._cursor = point
 
@@ -79,5 +100,6 @@ def print_board(board, clear=True, message=""):
     if clear:
         clear_display()
 
+    print(OPTIONS)
     print(message, end="\n")
     print(board)

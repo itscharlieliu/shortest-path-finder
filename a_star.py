@@ -10,20 +10,20 @@ DIAGONAL = 14.142135623730951
 NON_DIAGONAL = 10
 
 
-def a_star(stop_calculation: Queue, board: Board, start: Coord, end: Coord):
+def a_star(stop_calculation: Queue, board: Board):
     """
     Function to find the shortest path on the board using the A* method
     :param stop_calculation: A queue where if we put anything, this thread will stop
     :param board: The game board that we use to navigate
-    :param start: The coordinate to start at
-    :param end: The coordinate where we want to reach
     """
 
-    start_node = board.get_at(start)
-    end_node = board.get_at(end)
+    if board.get_start() is None or board.get_end() is None:
+        sleep(0.01)
+        print_board(board, message="Must provide a start and end")
+        return
 
-    start_node.set_type(NodeType.important)
-    end_node.set_type(NodeType.important)
+    start_node = board.get_at(board.get_start())
+    end_node = board.get_at(board.get_end())
 
     open_list: List[SearchNode] = []
     closed_list: List[SearchNode] = []
