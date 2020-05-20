@@ -21,7 +21,7 @@ def main():
     height = 10
 
     board = Board(width, height)
-    print_board(board)
+    print_board(board, message=OPTIONS)
 
     stop_calculation = Queue()
 
@@ -50,7 +50,6 @@ def main():
             board.set_cursor(board.get_cursor() + Coord(0, 1))
         if key == keyboard.Key.space:
             board.toggle_wall(board.get_cursor())
-        print_board(board, message=EDIT_WALL_OPTIONS)
 
     def handle_run_algorithm():
         """run A* in a separate thread"""
@@ -69,7 +68,6 @@ def main():
         a_star_thread[0].start()
 
     def on_press(key):
-        sleep(0.01)
         if state.get() == AppState.running_algorithm:
             # Clear the board whenever the user presses a button
             board.clear()
@@ -86,7 +84,6 @@ def main():
         try:
             if key.char == "1":
                 board.set_cursor(Coord(0, 0))
-                print_board(board, message=EDIT_WALL_OPTIONS)
                 state.set(AppState.adding_wall)
                 return
             if key.char == "3":
@@ -100,6 +97,11 @@ def main():
             if key == keyboard.Key.enter:
                 input()
                 return False
+        finally:
+            message = OPTIONS + "\n"
+            if state.get() == AppState.adding_wall:
+                message += EDIT_WALL_OPTIONS
+            print_board(board, message=message)
 
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
