@@ -107,6 +107,6 @@ def a_star(stop_calculation: Queue, board: Board):
         closed_list.append(curr)
 
         print_board(board)
-        sleep(0.2)
+        sleep(0.05)
 
     print_board(board)
