@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-
+import shutil
 import threading
 from queue import Queue
 from time import sleep
@@ -18,8 +18,11 @@ RUNNING_A_STAR = "Running A*. Press any button to stop"
 
 
 def main():
-    width = 30
-    height = 20
+    # get the size of the terminal
+    terminal = shutil.get_terminal_size((80, 20))
+
+    width = int(terminal.columns / 2)
+    height = terminal.lines - 4
 
     board = Board(width, height)
     print_board(board)

@@ -1,3 +1,5 @@
+from time import sleep
+
 from EscapeCodes import EscapeCodes
 from coord import Coord
 from search_node import SearchNode, NodeType
@@ -97,6 +99,7 @@ class Board:
 
 
 def print_board(board, clear=True, message=""):
+    sleep(0.01)
     if clear:
         clear_display()
 
