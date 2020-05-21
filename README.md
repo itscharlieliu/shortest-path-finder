@@ -4,7 +4,7 @@ Shortest Path Finder is a tool that demonstrates the [A* search algorithm](https
 The goal of this application is to showcase the power of this algorithm and demonstrate why it is widely used for pathfinding.
 
 ## Requirements
-You must have Python3 installed to run this program.
+You must have [Python3](https://www.python.org/downloads/) installed to run this program.
 
 ## How to run
 First, clone this repository onto your machine and enter the directory.
@@ -18,7 +18,7 @@ Then, install the requirements
 pip3 install -r requirements.txt
 ```
 
-Finally, run start the program
+Finally, start the program
 ```shell script
 python3 main.py
 ```
