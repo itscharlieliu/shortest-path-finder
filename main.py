@@ -32,12 +32,20 @@ def main():
 
     def handle_move_cursor(key):
         if key == keyboard.Key.left:
+            if board.get_cursor().x == 0:
+                return
             board.set_cursor(board.get_cursor() + Coord(-1, 0))
         if key == keyboard.Key.up:
+            if board.get_cursor().y == 0:
+                return
             board.set_cursor(board.get_cursor() + Coord(0, -1))
         if key == keyboard.Key.right:
+            if board.get_cursor().x == width - 1:
+                return
             board.set_cursor(board.get_cursor() + Coord(1, 0))
         if key == keyboard.Key.down:
+            if board.get_cursor().y == height - 1:
+                return
             board.set_cursor(board.get_cursor() + Coord(0, 1))
 
     def handle_run_algorithm():
