@@ -101,14 +101,20 @@ def main():
 
         try:
             if key.char == "1":
-                board.set_cursor(Coord(0, 0))
+                board.set_cursor(
+                    Coord(0, 0) if board.get_cursor() is None else board.get_cursor()
+                )
                 state.set(AppState.adding_wall)
                 return
             if key.char == "2":
-                board.set_cursor(Coord(0, 0))
+                board.set_cursor(
+                    Coord(0, 0) if board.get_cursor() is None else board.get_cursor()
+                )
                 state.set(AppState.setting_start)
             if key.char == "3":
-                board.set_cursor(Coord(0, 0))
+                board.set_cursor(
+                    Coord(0, 0) if board.get_cursor() is None else board.get_cursor()
+                )
                 state.set(AppState.setting_end)
             if key.char == "4":
                 handle_run_algorithm()
