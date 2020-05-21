@@ -22,3 +22,10 @@ Finally, run start the program
 ```shell script
 python3 main.py
 ```
+
+## Screenshots
+![Screenshot 1](./images/Screenshot_1.png)
+
+![Screenshot 2](./images/Screenshot_2.png)
+
+![Screenshot 3](./images/Screenshot_3.png)
