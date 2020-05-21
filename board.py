@@ -23,8 +23,10 @@ class Board:
         for row in self._board:
             for val in row:
                 string = str(val)
-                if val.coord == self._start or val.coord == self._end:
-                    string = "@ "
+                if val.coord == self._start:
+                    string = "ST"
+                if val.coord == self._end:
+                    string = "EN"
                 if val.coord == self._cursor:
                     result += "{color}{val}{end}".format(
                         color=EscapeCodes.red, val=string, end=EscapeCodes.none
